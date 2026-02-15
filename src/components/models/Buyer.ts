@@ -1,6 +1,5 @@
-import { IBuyer, TPayment } from '../../types';
-
-type TBuyerErrors = Partial<Record<keyof IBuyer, string>>;
+import { IBuyer, TPayment, TBuyerErrors } from '../../types';
+import { IEvents } from "../base/Events";
 
 export class Buyer {
 
@@ -8,14 +7,17 @@ export class Buyer {
   private address: string;
   private email: string;
   private phone: string;
+  private events: IEvents;
   
 
-  constructor() {
+  constructor(events: IEvents) {
     this.payment = null;
     this.address = "";    
     this.email = "";
     this.phone = "";
+    this.events = events;
   }
+  
   /* сохраняет данные покупателя */
   setData(data: Partial<IBuyer>): void {
     if (data.payment !== undefined) {
@@ -30,6 +32,7 @@ export class Buyer {
     if (data.phone !== undefined) {
       this.phone = data.phone;
     }
+    this.events.emit('buyer:changed');
   }
 
   /* возвращает все данные покупателя */
@@ -48,6 +51,7 @@ export class Buyer {
     this.address = "";
     this.email = "";
     this.phone = "";
+    this.events.emit('buyer:changed');
   }
   
   /* выполняет валидацию данных покупателя */

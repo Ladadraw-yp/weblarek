@@ -21,13 +21,19 @@ export interface IBuyer {
   phone: string;
 }
 
-export type TPayment = 'online' | 'onDelivery' | null;
+export type TPayment = 'card' | 'cash' | null;
+
+export type TBuyerErrors = Partial<Record<keyof IBuyer, string>>
 
 export interface IProductsResponse {
   items: IProduct[];
 }
 
 export interface IOrderRequest {
-  buyer: IBuyer;
-  products: IProduct[];
+  payment: TPayment;
+  address: string;
+  email: string;
+  phone: string;
+  items: string[];
+  total: number;
 }
