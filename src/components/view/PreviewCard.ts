@@ -9,6 +9,9 @@ export interface IPreviewCard extends ICatalogCard {
   buttonText: string;
 }
 
+interface ICardActions {
+  onClick: (event: MouseEvent) => void;
+}
 
 export class PreviewCard extends Card<IPreviewCard> {
     protected imageCard: HTMLImageElement;
@@ -16,14 +19,15 @@ export class PreviewCard extends Card<IPreviewCard> {
     protected descriptionCard: HTMLElement;
     protected buttonCard: HTMLButtonElement;
 
-    constructor(container: HTMLElement, onClick: () => void) {
+    constructor(container: HTMLElement, action?: ICardActions) {
         super(container);
         this.imageCard = ensureElement<HTMLImageElement>('.card__image', this.container);
         this.categoryCard = ensureElement<HTMLElement>('.card__category', this.container);
         this.descriptionCard = ensureElement<HTMLElement>('.card__text', this.container);
         this.buttonCard = ensureElement<HTMLButtonElement>('.card__button', this.container);
-
-        this.buttonCard.addEventListener('click', onClick);
+        if (action?.onClick) {
+            this.buttonCard.addEventListener('click', action.onClick);
+        }
     }
 
     set image(value: string) {
@@ -49,5 +53,6 @@ export class PreviewCard extends Card<IPreviewCard> {
 
     set buttonActive(value: boolean) {
         this.buttonCard.disabled = !value 
-    }   
+    }
+       
 }

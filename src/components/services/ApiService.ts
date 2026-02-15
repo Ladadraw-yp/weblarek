@@ -1,4 +1,4 @@
-import { IApi,  IProduct, IOrderRequest, IProductsResponse } from '../../types';
+import { IApi,  IProduct, IProductsResponse, IOrderRequest, IOrderApiResponse } from '../../types';
 
 export class ApiService {
 
@@ -16,7 +16,7 @@ export class ApiService {
   }
 
   /* Отправляет заказ на сервер  */
-  createOrder(data: IOrderRequest): Promise<IOrderRequest> {
+  createOrder(data: IOrderRequest): Promise<IOrderApiResponse> {
     return this.api.post('/order/', data);
   }
 }

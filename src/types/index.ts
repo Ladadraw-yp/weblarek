@@ -37,3 +37,8 @@ export interface IOrderRequest {
   items: string[];
   total: number;
 }
+
+export interface IOrderApiResponse {
+  id: string;
+  total: number;
+}

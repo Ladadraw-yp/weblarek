@@ -3,7 +3,7 @@ import { IEvents } from "../base/Events";
 
 export class Buyer {
 
-  private payment: TPayment | null;
+  private payment: TPayment;
   private address: string;
   private email: string;
   private phone: string;

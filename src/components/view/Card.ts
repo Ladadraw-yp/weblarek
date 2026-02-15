@@ -2,7 +2,6 @@ import { ensureElement } from "../../utils/utils.ts";
 import { Component } from "../base/Component.ts";
 
 export interface ICard {
-  id: string;
   title: string;
   price: number | null;
 }
