@@ -6,7 +6,7 @@ import { Buyer } from "./components/models/Buyer";
 
 import { EventEmitter } from "./components/base/Events";
 import { ensureElement, cloneTemplate } from "./utils/utils";
-import { IProduct, IOrderRequest, TBuyerErrors } from "./types";
+import { IProduct, IOrderRequest } from "./types";
 
 import { Header } from "./components/view/Header";
 import { Gallery } from "./components/view/Gallery";
@@ -122,8 +122,8 @@ events.on("basket:changed", () => {
 });
 
 events.on("basket:open", () => {
-  modal.open();
-  events.emit("basket:changed"); 
+  modal.content = basketView.render()
+  modal.open() 
 });
 
 events.on("basket:remove", (product: IProduct) => {
@@ -134,17 +134,8 @@ events.on("basket:remove", (product: IProduct) => {
 events.on("basket:checkout", () => {
   currentForm = "order";
   modal.content = formOrder.render();
-  modal.open();
 });
 
-events.on("modal:open", () => {
-  if (currentForm === "order") {
-    events.emit("buyer:changed");
-  }
-  if (currentForm === "contacts") {
-    events.emit("buyer:changed");
-  }
-});
 
 events.on("buyer:changed", () => {
   const buyer = buyerModel.getData();
@@ -180,7 +171,6 @@ events.on("form:changed", (data: { key: string; value: any }) => {
 events.on("order:submit", () => {
   currentForm = "contacts";
   modal.content = formContacts.render();
-  events.emit("buyer:changed");
 });
 
 events.on("contacts:submit", () => {
@@ -194,25 +184,18 @@ events.on("contacts:submit", () => {
   apiService
     .createOrder(orderData)
     .then((response) => {
+      
       success.total = response.total;
       currentForm = null;
-      
-      events.emit("order:success");
+
+      basketModel.clear();
+      buyerModel.clear();
+      modal.content = success.render();
     })
     .catch((error) => {
       console.error("Ошибка оформления заказа:", error);
       formContacts.error = "Ошибка оформления заказа";
     });
-});
-
-events.on("order:success", () => {
-  events.emit("userdata:clear");
-  modal.content = success.render();
-});
-
-events.on("userdata:clear", () => {
-  basketModel.clear();
-  buyerModel.clear();
 });
 
 events.on("success:close", () => {

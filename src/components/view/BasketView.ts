@@ -24,20 +24,21 @@ export class BasketView extends Component<IBasketView> {
     this.button.addEventListener("click", () => {
       this.events.emit("basket:checkout");
     });
+
+    this.setButtonDisabled(true);
+  }
+
+  protected setButtonDisabled(state: boolean): void {
+      this.button.disabled = state;
   }
 
   set items(items: HTMLElement[]) {
-    if (items.length > 0) {
-      this.listElement.replaceChildren(...items);
-      this.button.disabled = false;
-    } else {
-      this.listElement.replaceChildren();
-      this.listElement.textContent = "";
-      this.button.disabled = true;
-    }
+    this.listElement.replaceChildren(...items);
+    this.setButtonDisabled(items.length === 0);
   }
 
   set total(value: number) {
     this.totalElement.textContent = `${value} синапсов`;
   }
+  
 }

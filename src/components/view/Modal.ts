@@ -9,7 +9,7 @@ interface IModal {
 
 export class Modal extends Component<IModal> {
   protected closeButton: HTMLButtonElement;
-  protected cntentInModal: HTMLElement;
+  protected contentInModal: HTMLElement;
 
   constructor(
     container: HTMLElement,
@@ -18,7 +18,7 @@ export class Modal extends Component<IModal> {
     super(container);
 
     this.closeButton = ensureElement<HTMLButtonElement>( ".modal__close", this.container );
-    this.cntentInModal = ensureElement<HTMLElement>( ".modal__content", this.container );
+    this.contentInModal = ensureElement<HTMLElement>( ".modal__content", this.container );
 
     this.closeButton.addEventListener("click", this.close.bind(this));
     this.container.addEventListener("mousedown", (event: MouseEvent) => {
@@ -36,19 +36,17 @@ export class Modal extends Component<IModal> {
   }
 
   set content(value: HTMLElement) {
-    this.cntentInModal.replaceChildren(value);
+    this.contentInModal.replaceChildren(value);
   }
 
   open(): void {
     this.container.classList.add("modal_active");
     document.addEventListener("keyup", this.handleEscUp);
-    this.events.emit("modal:open");
   }
 
   close(): void {
     this.container.classList.remove("modal_active");
     document.removeEventListener("keyup", this.handleEscUp);
-    this.cntentInModal.replaceChildren();
-    this.events.emit("modal:close");
+    this.contentInModal.replaceChildren();
   }
 }
